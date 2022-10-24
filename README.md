@@ -7,4 +7,9 @@ cd ros_environment
 rosrun xacro xacro src/xacro/xxx.xacro>xxx.urdf
 ```
 
+# Check in pybullet
+
 You can check the urdf of terrain in pybullet. Unconmment the ralated lines and run ```load_environment.py```. 
+
+
+```heightfield.py``` show the example to generate a height field terrain.
