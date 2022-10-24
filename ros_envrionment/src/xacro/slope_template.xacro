@@ -1,0 +1,81 @@
+<robot name="stairs" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <material name="tan">
+        <color rgba="0.824 0.706 0.549 1.0"/>
+    </material>
+
+    <!-- change value for different stairs -->
+    <xacro:property name="plane_length" value="2." /> 
+    <xacro:property name="plane_width" value="1.5" /> 
+    <xacro:property name="plane_height" value="1.2" /> 
+    <xacro:property name="plane_mass" value="10" />
+
+    <xacro:property name="slope_angle" value="${25/180*pi}" />
+    <xacro:property name="slope_length" value="${plane_height/2/sin(slope_angle)}" />
+    <xacro:property name="slope_width" value="1.5" /> 
+    <xacro:property name="slope_height" value="${plane_height/2/cos(slope_angle)}" />
+    <xacro:property name="slope_x" value="${plane_height/2/tan(2*slope_angle) + plane_length/2}" />
+    <xacro:property name="slope_mass" value="10" />
+
+    <link name="link_base">
+        <xacro:Box_inertial_matrix m="${plane_mass}" l="${plane_length}" w="${plane_width}" h="${plane_height}" />
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${plane_length} ${plane_width} ${plane_height}" />
+            </geometry>
+            <material name="tan" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${plane_length} ${plane_width} ${plane_height}" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="link_left">
+        <xacro:Box_inertial_matrix m="${slope_mass}" l="${sin(slope_angle)}" w="${slope_width}" h="${cos(slope_angle)}" />
+        <visual>
+            <origin xyz="0 0 0" rpy="0 ${slope_angle} 0" />
+            <geometry>
+                <box size="${slope_length} ${slope_width} ${slope_height}" />
+            </geometry>
+            <material name="tan" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 ${slope_angle} 0" />
+            <geometry>
+                <box size="${slope_length} ${slope_width} ${slope_height}" />
+            </geometry>
+        </collision>
+    </link> 
+    <joint name="joint_left" type="fixed">
+        <parent link="link_base" />
+        <child link="link_left" />
+        <origin xyz="${slope_x} 0 0" />
+    </joint>
+
+    <link name="link_right">
+        <xacro:Box_inertial_matrix m="${slope_mass}" l="${sin(slope_angle)}" w="${slope_width}" h="${cos(slope_angle)}" />
+        <visual>
+            <origin xyz="0 0 0" rpy="0 ${-slope_angle} 0" />
+            <geometry>
+                <box size="${slope_length} ${slope_width} ${slope_height}" />
+            </geometry>
+            <material name="tan" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 ${-slope_angle} 0" />
+            <geometry>
+                <box size="${slope_length} ${slope_width} ${slope_height}" />
+            </geometry>
+        </collision>
+    </link> 
+    <joint name="joint_right" type="fixed">
+        <parent link="link_base" />
+        <child link="link_right" />
+        <origin xyz="${-slope_x} 0 0" />
+    </joint>
+    
+</robot>

@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/feng_shihao/fsh_file/Quadruped_control_system/simulation/environment/ros_envrionment/devel -DCMAKE_INSTALL_PREFIX=/home/feng_shihao/fsh_file/Quadruped_control_system/simulation/environment/ros_envrionment/install -G Unix Makefiles

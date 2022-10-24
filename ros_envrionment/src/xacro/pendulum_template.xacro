@@ -1,0 +1,87 @@
+<robot name="pendulum" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <material name="red">
+        <color rgba="1 0 0 1"/>
+    </material>
+    <material name="green">
+        <color rgba="0 1 0 1"/>
+    </material>
+    <material name="blue">
+        <color rgba="0 0 1 1"/>
+    </material>
+
+    <!-- change value for different stairs -->
+    <xacro:property name="rod_mass" value="0.1" /> 
+    <xacro:property name="rod_length" value="0.75" /> 
+    <xacro:property name="rod_radius" value="0.01" /> 
+    <xacro:property name="ball_radius" value="0.1" /> 
+    <xacro:property name="ball_mass" value="5" /> 
+
+    <link name="link_base">
+        <xacro:Box_inertial_matrix m="0.01" l="0.05" w="0.05" h="0.05" />
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.05 0.05 0.05" />
+            </geometry>
+            <material name="red" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.05 0.05 0.05" />
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="link_rod">
+        <xacro:cylinder_inertial_matrix m="${rod_mass}" r="${rod_radius}" h="${rod_length}" />
+        <visual>
+            <origin xyz="0 0 ${-rod_length/2}" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${rod_radius}" length="${rod_length}" />
+            </geometry>
+            <material name="green" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 ${-rod_length/2}" rpy="0 0 0" />
+            <geometry>
+                <cylinder radius="${rod_radius}" length="${rod_length}" />
+            </geometry>
+        </collision>
+    </link> 
+    <joint name="joint_rod" type="revolute">
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <parent link="link_base" />
+        <child link="link_rod" />
+        <axis xyz="1 0 0" />
+        <limit
+            lower="-1.57"
+            upper="1.57"
+            effort="100"
+            velocity="100" />
+    </joint>
+    
+    <link name="link_ball">
+        <xacro:sphere_inertial_matrix m="${ball_mass}" r="${ball_radius}" />
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="${ball_radius}"/>
+            </geometry>
+            <material name="blue" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="${ball_radius}"/>
+            </geometry>
+        </collision>
+    </link> 
+    <joint name="joint_ball" type="fixed">
+        <parent link="link_rod" />
+        <child link="link_ball" />
+        <origin xyz="0 0 ${-rod_length}" />
+    </joint>
+
+</robot>

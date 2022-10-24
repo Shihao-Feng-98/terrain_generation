@@ -1,0 +1,11 @@
+<robot name="slope" xmlns:xacro="http://wiki.ros.org/xacro">
+    <!-- calculate inertial -->
+    <xacro:include filename="inertial.xacro" />
+    <!-- main  -->
+    <xacro:include filename="slope_template.xacro" />
+
+    <!--
+        run the following cmd to generate urdf file 
+        rosrun xacro xacro filename.xacro>filename_new.urdf 
+    -->
+</robot>

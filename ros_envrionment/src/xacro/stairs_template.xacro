@@ -1,0 +1,65 @@
+<robot name="stairs" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <material name="tan">
+        <color rgba="0.824 0.706 0.549 1.0"/>
+    </material>
+
+    <!-- change value for different stairs -->
+    <xacro:property name="stairs_length" value="6" /> 
+    <xacro:property name="stairs_width" value="1.5" /> 
+    <xacro:property name="stairs_height" value="0.05" />
+    <xacro:property name="stairs_mass" value="10" />
+    <xacro:property name="stairs_slope" value="3" />
+
+    <xacro:macro name="link_func" params="order">
+        <link name="link_${order}">
+            <xacro:Box_inertial_matrix m="${stairs_mass}" l="${stairs_length-order*(2*stairs_slope*stairs_height)}" w="${stairs_width}" h="${stairs_height}" />
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size="${stairs_length-order*(2*stairs_slope*stairs_height)} ${stairs_width} ${stairs_height}" />
+                </geometry>
+                <material name="tan" />
+            </visual>
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0" />
+                <geometry>
+                    <box size="${stairs_length-order*(2*stairs_slope*stairs_height)} ${stairs_width} ${stairs_height}" />
+                </geometry>
+            </collision>
+        </link>
+        <joint name="joint_${order}" type="fixed">
+            <parent link="link_${order-1}" />
+            <child link="link_${order}" />
+            <origin xyz="0 0 ${stairs_height}" />
+        </joint>
+    </xacro:macro>
+
+    <!-- build stairs -->
+    <link name="link_0">
+        <xacro:Box_inertial_matrix m="${stairs_mass}" l="${stairs_length}" w="${stairs_width}" h="${stairs_height}" />
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${stairs_length} ${stairs_width} ${stairs_height}" />
+            </geometry>
+            <material name="tan" />
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="${stairs_length} ${stairs_width} ${stairs_height}" />
+            </geometry>
+        </collision>
+    </link>
+    <xacro:link_func order="1" />
+    <xacro:link_func order="2" />
+    <xacro:link_func order="3" />
+    <xacro:link_func order="4" />
+    <xacro:link_func order="5" />
+    <xacro:link_func order="6" />
+    <xacro:link_func order="7" />
+    <xacro:link_func order="8" />
+    <xacro:link_func order="9" />
+    
+</robot>
